@@ -390,34 +390,42 @@ function destroyLW() {
   }
 }
 
-// 모바일에선 LightweightCharts Canvas 가 iOS Safari iframe 안에서 0×0 으로 잡히는 이슈가 있어
-// SVG 폴백 (renderChart) 을 사용. 데스크탑은 LWC 유지.
-function _useSvgFallback() {
-  return (typeof navigator !== "undefined" && /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent))
-      || (typeof window !== "undefined" && window.innerWidth < 820);
-}
-
 function loadChart(symbol, name, code) {
   document.getElementById("chartName").textContent = name;
   document.getElementById("chartSym").textContent = symbol;
   const linkEl = document.getElementById("tvLink");
   if (linkEl) linkEl.href = "https://www.tradingview.com/symbols/KRX-" + code + "/";
 
-  // ── 모바일: SVG 폴백 사용 ──
-  if (_useSvgFallback()) {
-    destroyLW();
-    const c = document.getElementById("tvchart"); if (c) c.style.display = "none";
-    const fb = document.getElementById("chartFallback");
-    if (fb) fb.classList.add("show");
-    try { renderChart(code); } catch(_) {}
-    currentCode = code;
-    return;
+  // ── 종목 클릭 시 가격/변동률 즉시 리셋 (이전 종목의 잔상 제거) ──
+  // 새 tick이 올 때까지 STOCK_DATA의 마지막 일봉 종가로 채워둠.
+  const _d = STOCK_DATA[code];
+  const tile = document.getElementById("liveTile");
+  const pEl = document.getElementById("livePrice");
+  const cEl = document.getElementById("liveChange");
+  if (tile && pEl && cEl && _d && _d.close && _d.close.length) {
+    const last = _d.close[_d.close.length - 1];
+    const prev = _d.close.length > 1 ? _d.close[_d.close.length - 2] : null;
+    pEl.textContent = (last != null ? Number(last).toLocaleString("ko-KR") : "—") + "원";
+    pEl.dataset.prev = prev != null ? prev : 0;
+    if (last != null && prev != null && prev !== 0) {
+      const diff = last - prev;
+      const pct = (diff / prev) * 100;
+      const sign = diff >= 0 ? "+" : "";
+      cEl.textContent = sign + Number(diff).toLocaleString("ko-KR") + " (" + sign + pct.toFixed(2) + "%)";
+      cEl.className = diff >= 0 ? "pos" : "neg";
+    } else {
+      cEl.textContent = "";
+    }
+    tile.style.display = "inline-flex";
   }
 
   const container = document.getElementById("tvchart");
   if (!container) return;
   destroyLW();
   container.innerHTML = "";
+  // 모바일 Safari 가 0×0 으로 잡지 않도록 명시 픽셀 강제
+  container.style.width = "100%";
+  container.style.height = "580px";
   const data = STOCK_DATA[code];
   if (!data || !data.close || !data.close.length) {
     container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:'+cssVar('--muted')+';font-size:13px">차트 데이터 없음</div>';
