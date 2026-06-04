@@ -239,7 +239,7 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
 <footer>매일 평일 18:30 자동 수집·스크리닝 후 결과 갱신 · 패턴 탐색 결과이며 매수 추천이 아닙니다</footer>
 </div>
 
-<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.min.js"></script>
 <script>
 const RET_LABELS = {"r1m":"1개월","r3m":"3개월","r6m":"6개월","r1y":"1년","rytd":"YTD"};
 const THEMES = ["white","dark","green"];
@@ -410,7 +410,11 @@ function loadChart(symbol, name, code) {
     return;
   }
   const c = lwColors();
+  // 모바일 Safari에서 autoSize ResizeObserver 가 안 먹는 경우 대비 — 명시 크기 전달
+  const _w = container.clientWidth || container.parentElement?.clientWidth || window.innerWidth || 360;
+  const _h = container.clientHeight || 580;
   lwChart = LightweightCharts.createChart(container, {
+    width: _w, height: _h,
     autoSize: true,
     layout: {
       background: { type: "solid", color: cssVar("--chart-bg") || (c.isDark ? "#0f1626" : "#fafbfc") },
@@ -465,6 +469,30 @@ function loadChart(symbol, name, code) {
   if (markers.length) lwCandle.setMarkers(markers);
 
   lwChart.timeScale().fitContent();
+  // ── 모바일 Safari 강건 사이즈 처리 ──
+  const _resizeChart = () => {
+    if (!lwChart || !container) return;
+    const r = container.getBoundingClientRect();
+    const w = Math.max(r.width || container.clientWidth || (window.innerWidth - 32) || 320, 1);
+    const h = Math.max(r.height || container.clientHeight || 580, 1);
+    try {
+      lwChart.applyOptions({ width: w, height: h });
+      lwChart.timeScale().fitContent();
+    } catch(_) {}
+  };
+  // 즉시 + 다단계 백오프 (iOS Safari 렌더 사이클 변동 대응)
+  requestAnimationFrame(_resizeChart);
+  setTimeout(_resizeChart, 50);
+  setTimeout(_resizeChart, 200);
+  setTimeout(_resizeChart, 600);
+  setTimeout(_resizeChart, 1500);
+  // ResizeObserver 가 가능하면 컨테이너 변화 추적
+  if (!container.__roAttached && typeof ResizeObserver !== "undefined") {
+    try { new ResizeObserver(_resizeChart).observe(container); container.__roAttached = true; } catch(_) {}
+  }
+  // 페이지 가시성/방향 전환에도 대응
+  window.addEventListener("orientationchange", _resizeChart);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) _resizeChart(); });
   currentCode = code;
 }
 
