@@ -93,7 +93,8 @@ header .basedate b { color:var(--accent); }
 .tbl-card { background:var(--card); border:1px solid var(--line);
   border-radius:14px; overflow:hidden; margin:12px 0 22px; box-shadow:0 1px 3px rgba(15,23,42,.04); }
 table { width:100%; border-collapse:separate; border-spacing:0; font-size:13.5px; table-layout:fixed; }
-col.c-idx{width:44px;} col.c-disc{width:96px;} col.c-name{width:200px;} col.c-mkt{width:82px;}
+col.c-idx{width:44px;} col.c-disc{width:120px;} col.c-name{width:200px;} col.c-mkt{width:82px;}
+td.discovered { text-align:center; }
 col.c-sec{width:140px;} col.c-cap{width:100px;} col.c-ret{width:112px;}
 col.c-dec{width:90px;} col.c-below{width:104px;} col.c-rec{width:120px;}
 col.c-gap{width:72px;} col.c-vol{width:90px;}
@@ -317,17 +318,17 @@ document.getElementById("retSel").addEventListener("change", function(e){
 function applyPeriodFilter(period) {
   const rows = Array.from(document.querySelectorAll("#tbody tr[data-first-seen]"));
   if (!rows.length) return;
-  const dates = rows.map(r => r.dataset.firstSeen).filter(Boolean).sort();
-  if (!dates.length) return;
-  const latest = dates[dates.length - 1];
-  const latestD = new Date(latest + "T00:00:00");
+  // "오늘" = 스크리닝 실행일 (basedate에서 추출). 데이터가 비어도 정상 동작.
+  const baseEl = document.querySelector("header .basedate b");
+  const today = (baseEl && baseEl.textContent.trim()) || new Date().toISOString().slice(0, 10);
+  const todayD = new Date(today + "T00:00:00");
   let cutoff;
   if (period === "today") {
-    cutoff = latest;
+    cutoff = today;
   } else if (period === "1w") {
-    const d = new Date(latestD); d.setDate(d.getDate() - 6); cutoff = d.toISOString().slice(0, 10);
+    const d = new Date(todayD); d.setDate(d.getDate() - 6); cutoff = d.toISOString().slice(0, 10);
   } else if (period === "1m") {
-    const d = new Date(latestD); d.setDate(d.getDate() - 29); cutoff = d.toISOString().slice(0, 10);
+    const d = new Date(todayD); d.setDate(d.getDate() - 29); cutoff = d.toISOString().slice(0, 10);
   } else {
     cutoff = "0000-00-00";
   }
