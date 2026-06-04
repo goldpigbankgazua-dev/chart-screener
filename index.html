@@ -158,11 +158,7 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
     <div class="meta">생성 <b>2026-06-03 23:09:19</b> · 스캔 730종목 ·
       패턴 일치 <span class="pill">3종목</span> · 회복일 최신순</div>
   </div>
-  <div class="theme-switch" id="themeSwitch">
-    <button data-theme="white">화이트</button>
-    <button data-theme="dark">다크</button>
-    <button data-theme="green" class="active">그린</button>
-  </div>
+  <!-- 테마 토글은 여비또니 주식봇 허브에서 단일 컨트롤됨 -->
 </header>
 
 <div class="toolbar">
@@ -543,10 +539,26 @@ document.querySelectorAll("#tbody tr[data-symbol]").forEach(function(row) {
   });
 });
 
+// ===== 허브 신호 수신 (postMessage + URL 파라미터) =====
+// 허브 테마명 "light" → 차트 내부명 "white" 매핑
+function _normalizeHubTheme(t) {
+  if (t === "light") return "white";
+  if (["white","dark","green"].includes(t)) return t;
+  return null;
+}
+window.addEventListener("message", function(e) {
+  if (e.data && e.data.type === "yeobtoni-theme") {
+    const n = _normalizeHubTheme(e.data.value);
+    if (n) applyTheme(n);
+  }
+});
+
 (function init() {
   let saved = null;
   try { saved = localStorage.getItem("screener-theme"); } catch(e) {}
-  applyTheme((saved && THEMES.indexOf(saved) >= 0) ? saved : "green");
+  const urlT = _normalizeHubTheme(new URLSearchParams(location.search).get("theme"));
+  const initial = urlT || (saved && THEMES.indexOf(saved) >= 0 ? saved : "white");
+  applyTheme(initial);
   applyReturnPeriod("r3m");
   const first = document.querySelector("#tbody tr[data-symbol]");
   if (first) {
