@@ -390,11 +390,30 @@ function destroyLW() {
   }
 }
 
+// 모바일에선 LightweightCharts Canvas 가 iOS Safari iframe 안에서 0×0 으로 잡히는 이슈가 있어
+// SVG 폴백 (renderChart) 을 사용. 데스크탑은 LWC 유지.
+function _useSvgFallback() {
+  return (typeof navigator !== "undefined" && /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent))
+      || (typeof window !== "undefined" && window.innerWidth < 820);
+}
+
 function loadChart(symbol, name, code) {
   document.getElementById("chartName").textContent = name;
   document.getElementById("chartSym").textContent = symbol;
   const linkEl = document.getElementById("tvLink");
   if (linkEl) linkEl.href = "https://www.tradingview.com/symbols/KRX-" + code + "/";
+
+  // ── 모바일: SVG 폴백 사용 ──
+  if (_useSvgFallback()) {
+    destroyLW();
+    const c = document.getElementById("tvchart"); if (c) c.style.display = "none";
+    const fb = document.getElementById("chartFallback");
+    if (fb) fb.classList.add("show");
+    try { renderChart(code); } catch(_) {}
+    currentCode = code;
+    return;
+  }
+
   const container = document.getElementById("tvchart");
   if (!container) return;
   destroyLW();
