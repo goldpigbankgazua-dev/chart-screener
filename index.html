@@ -75,12 +75,15 @@ header .pill { display:inline-block; padding:2px 8px; border-radius:6px;
 .toolbar select:focus { outline:none; border-color:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,.15); }
 
 .tbl-card { background:var(--card); border:1px solid var(--line);
-  border-radius:14px; overflow:hidden; margin:12px 0 22px; box-shadow:0 1px 3px rgba(15,23,42,.04); }
-table { width:100%; border-collapse:separate; border-spacing:0; font-size:13.5px; table-layout:fixed; }
-col.c-idx{width:44px;} col.c-name{width:200px;} col.c-mkt{width:82px;}
-col.c-sec{width:140px;} col.c-cap{width:100px;} col.c-ret{width:112px;}
-col.c-dec{width:90px;} col.c-below{width:104px;} col.c-rec{width:120px;}
-col.c-gap{width:72px;} col.c-vol{width:90px;}
+  border-radius:14px; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch;
+  margin:12px 0 22px; box-shadow:0 1px 3px rgba(15,23,42,.04); }
+.tbl-card::-webkit-scrollbar { height:8px; }
+.tbl-card::-webkit-scrollbar-thumb { background:var(--line); border-radius:4px; }
+table { width:100%; border-collapse:separate; border-spacing:0; font-size:13px; table-layout:fixed; min-width:1100px; }
+col.c-idx{width:40px;} col.c-name{width:200px;} col.c-mkt{width:72px;}
+col.c-sec{width:130px;} col.c-cap{width:88px;} col.c-ret{width:90px;}
+col.c-dec{width:80px;} col.c-below{width:96px;} col.c-rec{width:104px;}
+col.c-gap{width:64px;} col.c-vol{width:90px;}
 thead th { background:var(--thead); color:var(--muted); font-weight:600; font-size:12px;
   text-align:right; padding:9px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
 thead th.left { text-align:left; }
@@ -187,7 +190,7 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
       <th class="center">시장</th>
       <th class="left">섹터</th>
       <th>시총</th>
-      <th id="thReturn">3개월 수익률</th>
+      <th id="thReturn">3개월%</th>
       <th>하락폭</th>
       <th>20MA↓체류</th>
       <th>회복일</th>
@@ -251,7 +254,8 @@ function fmtReturn(v) {
 }
 
 function applyReturnPeriod(key) {
-  document.getElementById("thReturn").textContent = RET_LABELS[key] + " 수익률";
+  // 헤더 폭이 변하지 않도록 짧은 라벨 사용
+  document.getElementById("thReturn").textContent = RET_LABELS[key] + "%";
   document.querySelectorAll("#tbody tr[data-r1m]").forEach(function(row) {
     const cell = row.querySelector("td.ret");
     if (!cell) return;
@@ -639,6 +643,13 @@ function kisSubscribe(code) {
 }
 
 function kisConnect() {
+  // 로컬에서 열었을 때만 실시간 데몬 연결 시도. 배포된 사이트(GitHub Pages 등)에서는 정적 모드.
+  var h = location.hostname;
+  var isLocal = h === "" || h === "localhost" || h === "127.0.0.1" || h === "0.0.0.0" || h.endsWith(".local");
+  if (!isLocal) {
+    setConn("", "정적 모드 (실시간 미연결)");
+    return;
+  }
   setConn("", "실시간 연결중...");
   try {
     kisWs = new WebSocket("ws://127.0.0.1:8765");
