@@ -55,14 +55,14 @@ html,body { margin:0; padding:0; background:var(--bg); color:var(--ink);
 
 header { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:14px; flex-wrap:wrap; }
 header .titles { flex:1; min-width:200px; }
-header h1 { font-size:22px; margin:0 0 2px; letter-spacing:-.012em; font-weight:700; }
+header h1 { font-size:22px; margin:0 0 2px; font-weight:700; }
 header .sub { color:var(--muted); font-size:13px; margin:0; }
 header .sub b { color:var(--ink); font-weight:600; }
 header .pill { display:inline-block; padding:2px 8px; border-radius:6px;
   background:var(--pill-bg); color:var(--pill-fg); font-weight:600; font-size:12px; margin-left:4px; }
-header .basedate { color:var(--ink); background:var(--card); border:1px solid var(--line);
+header .basedate { color:var(--muted); background:var(--card); border:1px solid var(--line);
   padding:6px 12px; border-radius:8px; font-size:12px; white-space:nowrap; flex-shrink:0; }
-header .basedate b { color:var(--accent); font-weight:600; }
+header .basedate b { color:var(--accent); }
 @media (max-width:720px){
   header h1 { font-size:19px; }
   header { gap:8px; }
@@ -89,10 +89,11 @@ header .basedate b { color:var(--accent); font-weight:600; }
 .tbl-card { background:var(--card); border:1px solid var(--line);
   border-radius:14px; overflow:hidden; margin:12px 0 22px; box-shadow:0 1px 3px rgba(15,23,42,.04); }
 table { width:100%; border-collapse:separate; border-spacing:0; font-size:13.5px; table-layout:fixed; }
-col.c-idx{width:44px;} col.c-name{width:200px;} col.c-mkt{width:82px;}
+col.c-idx{width:44px;} col.c-disc{width:96px;} col.c-name{width:200px;} col.c-mkt{width:82px;}
 col.c-sec{width:140px;} col.c-cap{width:100px;} col.c-ret{width:112px;}
 col.c-dec{width:90px;} col.c-below{width:104px;} col.c-rec{width:120px;}
 col.c-gap{width:72px;} col.c-vol{width:90px;}
+td.discovered, th:nth-child(2) { color:var(--ink); font-weight:600; }
 thead th { background:var(--thead); color:var(--muted); font-weight:600; font-size:12px;
   text-align:right; padding:9px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
 thead th.left { text-align:left; }
@@ -151,6 +152,13 @@ tbody td.empty { text-align:center; color:var(--muted); padding:36px 0; }
 .chart-head .legend .l-ma120 i { background:var(--ma120); }
 .chart-head .legend .l-peak i { width:8px; height:8px; border-radius:50%; background:#dc2626; }
 .chart-head .legend .l-rec i { width:8px; height:8px; border-radius:50%; background:#2563eb; }
+.tf-bar { display:flex; gap:6px; padding:8px 12px; background:var(--card); border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.tf-btn { appearance:none; border:1px solid var(--line); background:var(--card); color:var(--muted);
+  font:inherit; font-size:12px; font-weight:600; padding:5px 12px; border-radius:7px; cursor:pointer;
+  transition:all .12s ease; user-select:none; }
+.tf-btn:hover { color:var(--ink); border-color:var(--muted); }
+.tf-btn.active { background:var(--ink); color:var(--card); border-color:var(--ink); }
+[data-theme="dark"] .tf-btn.active { background:#e2e8f0; color:#0b1220; border-color:#e2e8f0; }
 .chart-wrap { height:580px; background:var(--chart-bg); position:relative; }
 #tvchart { width:100%; height:100%; }
 .chart-fallback { display:none; padding:8px 12px; height:100%; }
@@ -167,15 +175,22 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
 <header>
   <div class="titles">
     <h1>차트스크리너</h1>
-    <div class="sub">고점 후 눌림목 패턴 · 스캔 <b>727</b>종목 ·
+    <div class="sub">고점 후 눌림목 패턴 ·
       패턴 일치 <span class="pill">0종목</span> · 회복일 최신순</div>
   </div>
-  <div class="basedate">기준일 <b>2026-06-04</b></div>
+  <div class="basedate">기준일 <b>2026-06-05</b> · 727종목</div>
   <!-- 테마 토글은 여비또니 주식봇 허브에서 단일 컨트롤됨 -->
 </header>
 
 <div class="toolbar">
-  <label for="retSel">수익률 기간</label>
+  <label for="periodSel">기간</label>
+  <select id="periodSel">
+    <option value="today">오늘만</option>
+    <option value="1w">최근 1주</option>
+    <option value="1m" selected>최근 1달</option>
+    <option value="all">전체</option>
+  </select>
+  <label for="retSel" style="margin-left:14px">수익률 기간</label>
   <select id="retSel">
     <option value="r1m">1개월</option>
     <option value="r3m" selected>3개월</option>
@@ -188,7 +203,7 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
 <div class="tbl-card">
 <table>
   <colgroup>
-    <col class="c-idx"><col class="c-name"><col class="c-mkt"><col class="c-sec">
+    <col class="c-idx"><col class="c-disc"><col class="c-name"><col class="c-mkt"><col class="c-sec">
     <col class="c-cap"><col class="c-ret">
     <col class="c-dec"><col class="c-below"><col class="c-rec">
     <col class="c-gap"><col class="c-vol">
@@ -196,6 +211,7 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
   <thead>
     <tr>
       <th>#</th>
+      <th>발견일</th>
       <th class="left">종목</th>
       <th class="center">시장</th>
       <th class="left">섹터</th>
@@ -209,7 +225,7 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
     </tr>
   </thead>
   <tbody id="tbody">
-<tr><td colspan="11" class="empty">조건에 맞는 종목이 없습니다.</td></tr>
+<tr><td colspan="12" class="empty">조건에 맞는 종목이 없습니다.</td></tr>
   </tbody>
 </table>
 </div>
@@ -230,6 +246,11 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
       <span class="l-peak"><i></i>Peak</span>
       <span class="l-rec"><i></i>Reclaim</span>
     </span>
+  </div>
+  <div class="tf-bar" id="tfBar">
+    <button class="tf-btn active" data-tf="1D">1D</button>
+    <button class="tf-btn" data-tf="1W">1W</button>
+    <button class="tf-btn" data-tf="1M">1M</button>
   </div>
   <div class="chart-wrap">
     <div id="tvchart"></div>
@@ -277,6 +298,46 @@ function applyReturnPeriod(key) {
 document.getElementById("retSel").addEventListener("change", function(e){
   applyReturnPeriod(e.target.value);
 });
+
+// ─── 발견일 기간 필터 ───
+function applyPeriodFilter(period) {
+  const rows = Array.from(document.querySelectorAll("#tbody tr[data-first-seen]"));
+  if (!rows.length) return;
+  const dates = rows.map(r => r.dataset.firstSeen).filter(Boolean).sort();
+  if (!dates.length) return;
+  const latest = dates[dates.length - 1];
+  const latestD = new Date(latest + "T00:00:00");
+  let cutoff;
+  if (period === "today") {
+    cutoff = latest;
+  } else if (period === "1w") {
+    const d = new Date(latestD); d.setDate(d.getDate() - 6); cutoff = d.toISOString().slice(0, 10);
+  } else if (period === "1m") {
+    const d = new Date(latestD); d.setDate(d.getDate() - 29); cutoff = d.toISOString().slice(0, 10);
+  } else {
+    cutoff = "0000-00-00";
+  }
+  rows.forEach(r => {
+    const fs = r.dataset.firstSeen;
+    const show = period === "today" ? fs === cutoff : fs >= cutoff;
+    r.style.display = show ? "" : "none";
+  });
+  let n = 0;
+  rows.forEach(r => {
+    if (r.style.display === "none") return;
+    n++;
+    const idxCell = r.querySelector("td.idx");
+    if (idxCell) idxCell.textContent = n;
+  });
+}
+
+const _periodSel = document.getElementById("periodSel");
+if (_periodSel) {
+  _periodSel.addEventListener("change", function(e){
+    applyPeriodFilter(e.target.value);
+  });
+  applyPeriodFilter(_periodSel.value);
+}
 
 const NS = "http://www.w3.org/2000/svg";
 function el(tag, attrs) {
@@ -381,6 +442,49 @@ function renderChart(code) {
 
 let lwChart = null, lwCandle = null, lwMa20 = null, lwMa120 = null;
 let currentCode = null;
+let currentTF = "1D";
+
+// 일봉 데이터를 주봉/월봉으로 리샘플링
+function resampleCandles(data, tf) {
+  const out = [];
+  if (tf === "1D") {
+    for (let i = 0; i < data.dates.length; i++) {
+      const o = data.open[i], h = data.high[i], l = data.low[i], cl = data.close[i];
+      if (o === null || h === null || l === null || cl === null) continue;
+      out.push({ time: data.dates[i], open: o, high: h, low: l, close: cl });
+    }
+    return out;
+  }
+  const buckets = {};
+  const keys = [];
+  for (let i = 0; i < data.dates.length; i++) {
+    const o = data.open[i], h = data.high[i], l = data.low[i], cl = data.close[i];
+    if (o === null || h === null || l === null || cl === null) continue;
+    const dateStr = data.dates[i];
+    let key;
+    if (tf === "1W") {
+      const d = new Date(dateStr + "T00:00:00");
+      const day = d.getDay() || 7;
+      const monday = new Date(d);
+      monday.setDate(d.getDate() - day + 1);
+      key = monday.toISOString().slice(0, 10);
+    } else if (tf === "1M") {
+      key = dateStr.slice(0, 7) + "-01";
+    } else {
+      key = dateStr;
+    }
+    if (!buckets[key]) {
+      buckets[key] = { time: key, open: o, high: h, low: l, close: cl };
+      keys.push(key);
+    } else {
+      const b = buckets[key];
+      if (h > b.high) b.high = h;
+      if (l < b.low) b.low = l;
+      b.close = cl;
+    }
+  }
+  return keys.map(k => buckets[k]);
+}
 
 function lwColors() {
   const isDark = document.body.classList.contains("theme-dark");
@@ -441,8 +545,9 @@ function loadChart(symbol, name, code) {
     return;
   }
   const c = lwColors();
-  const _w = container.clientWidth || container.parentElement?.clientWidth || window.innerWidth || 360;
-  const _h = container.clientHeight || 580;
+  const _rect0 = container.getBoundingClientRect();
+  const _w = Math.max(_rect0.width || container.clientWidth || container.parentElement?.clientWidth || window.innerWidth - 32, 320);
+  const _h = Math.max(_rect0.height || container.clientHeight || 580, 400);
   lwChart = LightweightCharts.createChart(container, {
     width: _w, height: _h,
     autoSize: false,
@@ -460,43 +565,39 @@ function loadChart(symbol, name, code) {
     crosshair: { mode: 0 },
   });
 
-  // Build candle series
+  // Build candle series (1D / 1W / 1M)
   lwCandle = lwChart.addCandlestickSeries({
     upColor: "#ef4444", downColor: "#3b82f6",
     borderUpColor: "#ef4444", borderDownColor: "#3b82f6",
     wickUpColor: "#ef4444", wickDownColor: "#3b82f6",
   });
-  const candles = [];
-  for (let i = 0; i < data.dates.length; i++) {
-    const o = data.open[i], h = data.high[i], l = data.low[i], cl = data.close[i];
-    if (o === null || h === null || l === null || cl === null) continue;
-    candles.push({ time: data.dates[i], open: o, high: h, low: l, close: cl });
-  }
+  const candles = resampleCandles(data, currentTF);
   lwCandle.setData(candles);
 
-  lwMa20 = lwChart.addLineSeries({ color: cssVar("--ma20") || "#e8820c", lineWidth: 1.5, priceLineVisible: false, lastValueVisible: false });
-  const ma20pts = [];
-  for (let i = 0; i < data.dates.length; i++) {
-    if (data.ma20[i] !== null) ma20pts.push({ time: data.dates[i], value: data.ma20[i] });
-  }
-  lwMa20.setData(ma20pts);
+  if (currentTF === "1D") {
+    lwMa20 = lwChart.addLineSeries({ color: cssVar("--ma20") || "#e8820c", lineWidth: 1.5, priceLineVisible: false, lastValueVisible: false });
+    const ma20pts = [];
+    for (let i = 0; i < data.dates.length; i++) {
+      if (data.ma20[i] !== null) ma20pts.push({ time: data.dates[i], value: data.ma20[i] });
+    }
+    lwMa20.setData(ma20pts);
 
-  lwMa120 = lwChart.addLineSeries({ color: cssVar("--ma120") || "#9467bd", lineWidth: 1.2, priceLineVisible: false, lastValueVisible: false });
-  const ma120pts = [];
-  for (let i = 0; i < data.dates.length; i++) {
-    if (data.ma120[i] !== null) ma120pts.push({ time: data.dates[i], value: data.ma120[i] });
-  }
-  lwMa120.setData(ma120pts);
+    lwMa120 = lwChart.addLineSeries({ color: cssVar("--ma120") || "#9467bd", lineWidth: 1.2, priceLineVisible: false, lastValueVisible: false });
+    const ma120pts = [];
+    for (let i = 0; i < data.dates.length; i++) {
+      if (data.ma120[i] !== null) ma120pts.push({ time: data.dates[i], value: data.ma120[i] });
+    }
+    lwMa120.setData(ma120pts);
 
-  // Peak / Reclaim markers
-  const markers = [];
-  if (data.peak && data.dates[data.peak.i]) {
-    markers.push({ time: data.dates[data.peak.i], position: "aboveBar", color: "#dc2626", shape: "circle", text: "Peak" });
+    const markers = [];
+    if (data.peak && data.dates[data.peak.i]) {
+      markers.push({ time: data.dates[data.peak.i], position: "aboveBar", color: "#dc2626", shape: "circle", text: "Peak" });
+    }
+    if (data.reclaim && data.dates[data.reclaim.i]) {
+      markers.push({ time: data.dates[data.reclaim.i], position: "belowBar", color: "#2563eb", shape: "circle", text: "Reclaim" });
+    }
+    if (markers.length) lwCandle.setMarkers(markers);
   }
-  if (data.reclaim && data.dates[data.reclaim.i]) {
-    markers.push({ time: data.dates[data.reclaim.i], position: "belowBar", color: "#2563eb", shape: "circle", text: "Reclaim" });
-  }
-  if (markers.length) lwCandle.setMarkers(markers);
 
   lwChart.timeScale().fitContent();
   const _resizeChart = () => {
@@ -629,6 +730,24 @@ window.addEventListener("message", function(e) {
       const sel = document.querySelector("#tbody tr.sel");
       if (sel) renderChart(sel.dataset.code);
     }
+  });
+})();
+
+
+// =========================================================================
+// 차트 시간프레임 토글 (1D / 1W / 1M)
+// =========================================================================
+(function(){
+  const bar = document.getElementById("tfBar");
+  if (!bar) return;
+  bar.addEventListener("click", function(e){
+    const btn = e.target.closest(".tf-btn");
+    if (!btn || btn.classList.contains("active")) return;
+    bar.querySelectorAll(".tf-btn").forEach(function(b){
+      b.classList.toggle("active", b === btn);
+    });
+    currentTF = btn.dataset.tf;
+    if (currentCode) renderChart(currentCode);
   });
 })();
 
