@@ -642,17 +642,38 @@ function kisSubscribe(code) {
   } catch(e) {}
 }
 
-function kisConnect() {
-  // 로컬에서 열었을 때만 실시간 데몬 연결 시도. 배포된 사이트(GitHub Pages 등)에서는 정적 모드.
+async function kisConnect() {
+  // 우선순위: ?ws= 쿼리 파라미터 → kis-ws-url.txt → 로컬 ws://127.0.0.1:8765
   var h = location.hostname;
   var isLocal = h === "" || h === "localhost" || h === "127.0.0.1" || h === "0.0.0.0" || h.endsWith(".local");
-  if (!isLocal) {
-    setConn("", "정적 모드 (실시간 미연결)");
+
+  var wsUrl = null;
+  // 1) ?ws= 쿼리 파라미터 우선
+  var paramWs = new URLSearchParams(location.search).get("ws");
+  if (paramWs && (paramWs.indexOf("ws://") === 0 || paramWs.indexOf("wss://") === 0)) {
+    wsUrl = paramWs;
+  }
+  // 2) 공개 사이트: 같은 디렉토리의 kis-ws-url.txt 읽기 (cloudflared 터널 URL)
+  if (!wsUrl && !isLocal) {
+    try {
+      var res = await fetch("kis-ws-url.txt?t=" + Date.now(), { cache: "no-store" });
+      if (res.ok) {
+        var txt = (await res.text()).trim();
+        if (txt.indexOf("wss://") === 0 || txt.indexOf("ws://") === 0) wsUrl = txt;
+      }
+    } catch(_) {}
+  }
+  // 3) 로컬: 직접 데몬 연결
+  if (!wsUrl && isLocal) wsUrl = "ws://127.0.0.1:8765";
+
+  if (!wsUrl) {
+    setConn("", "정적 모드 (터널 미설정)");
     return;
   }
+
   setConn("", "실시간 연결중...");
   try {
-    kisWs = new WebSocket("ws://127.0.0.1:8765");
+    kisWs = new WebSocket(wsUrl);
   } catch(e) {
     setConn("err", "데몬 미실행");
     scheduleRetry();
