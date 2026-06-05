@@ -91,7 +91,9 @@ header .basedate b { color:var(--accent); }
 .control input[type="search"]::placeholder { color:var(--muted); font-weight:400; }
 
 .tbl-card { background:var(--card); border:1px solid var(--line);
-  border-radius:14px; overflow:hidden; margin:12px 0 22px; box-shadow:0 1px 3px rgba(15,23,42,.04); }
+  border-radius:14px; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch;
+  margin:12px 0 22px; box-shadow:0 1px 3px rgba(15,23,42,.04); }
+.tbl-card table { min-width:1240px; }
 table { width:100%; border-collapse:separate; border-spacing:0; font-size:13.5px; table-layout:fixed; }
 col.c-idx{width:44px;} col.c-disc{width:120px;} col.c-name{width:200px;} col.c-mkt{width:82px;}
 col.c-sec{width:140px;} col.c-cap{width:100px;} col.c-ret{width:112px;}
@@ -783,7 +785,15 @@ window.addEventListener("message", function(e) {
       b.classList.toggle("active", b === btn);
     });
     currentTF = btn.dataset.tf;
-    if (currentCode) renderChart(currentCode);
+    // LightweightCharts(loadChart)를 다시 그려야 timeframe 반영됨.
+    // 현재 선택된 row를 찾아서 loadChart 호출
+    const sel = document.querySelector("#tbody tr.sel") || document.querySelector("#tbody tr[data-code]");
+    if (sel) {
+      loadChart(sel.dataset.symbol, sel.dataset.name, sel.dataset.code);
+    } else if (currentCode) {
+      // fallback: SVG도 다시
+      renderChart(currentCode);
+    }
   });
 })();
 
