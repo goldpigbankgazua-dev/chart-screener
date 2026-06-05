@@ -100,8 +100,8 @@ col.c-gap{width:72px;} col.c-vol{width:90px;}
 td.discovered, th:nth-child(2) { color:var(--ink); font-weight:600; }
 td.discovered { text-align:center; }
 thead th { background:var(--thead); color:var(--muted); font-weight:600; font-size:12px;
-  text-align:right; padding:9px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
-thead th.left { text-align:left; }
+  text-align:center; padding:9px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+thead th.left { text-align:center; }
 thead th.center { text-align:center; }
 thead th#thReturn { color:var(--pill-fg); }
 tbody td { padding:9px 11px; border-bottom:1px solid var(--line-soft);
@@ -111,7 +111,7 @@ tbody td.idx { color:var(--muted-2); font-size:12px; }
 tbody td.name { text-align:left; font-weight:600; font-size:14px; color:var(--ink); }
 tbody td.name .code { color:var(--muted-2); font-size:11.5px; font-weight:500;
   margin-left:6px; font-family:ui-monospace,Menlo,monospace; }
-tbody td.mkt { text-align:center; }
+tbody td.mkt { text-align:center; overflow:visible; text-overflow:clip; }
 tbody td.mkt span { display:inline-block; padding:2px 7px; border-radius:5px;
   font-size:11px; font-weight:700; }
 tbody td.mkt.kospi span { background:var(--kospi-bg); color:var(--kospi); }
