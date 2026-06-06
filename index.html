@@ -600,7 +600,7 @@ function loadChart(symbol, name, code) {
       horzLines: { color: c.grid },
     },
     rightPriceScale: { borderColor: c.grid, scaleMargins: { top: 0.03, bottom: 0.02 }, autoScale: true },
-    timeScale: { borderColor: c.grid, timeVisible: false, secondsVisible: false, rightOffset: 2, fixLeftEdge: true, fixRightEdge: true },
+    timeScale: { borderColor: c.grid, timeVisible: false, secondsVisible: false, rightOffset: 0, fixLeftEdge: true, fixRightEdge: true, minBarSpacing: 0.1, barSpacing: 6 },
     crosshair: { mode: 0 },
   });
 
@@ -639,8 +639,20 @@ function loadChart(symbol, name, code) {
   }
 
   const _last = candles.length - 1;
-  if (_last > 0) { try { lwChart.timeScale().setVisibleLogicalRange({ from: 0, to: _last }); } catch(_) {} }
-  lwChart.timeScale().fitContent();
+  // 모든 봉이 균등하게 펴지도록 barSpacing을 컨테이너 폭 기준으로 강제 계산
+  const _forceFit = () => {
+    if (!lwChart || !container) return;
+    const _cw = container.clientWidth || container.getBoundingClientRect().width || window.innerWidth;
+    if (_last > 0 && _cw > 0) {
+      const _bs = Math.max(0.5, _cw / (candles.length + 2));
+      try { lwChart.timeScale().applyOptions({ barSpacing: _bs }); } catch(_) {}
+      try { lwChart.timeScale().setVisibleLogicalRange({ from: 0, to: _last }); } catch(_) {}
+    }
+    try { lwChart.timeScale().fitContent(); } catch(_) {}
+  };
+  _forceFit();
+  setTimeout(_forceFit, 100);
+  setTimeout(_forceFit, 400);
   const _resizeChart = () => {
     if (!lwChart || !container) return;
     const r = container.getBoundingClientRect();
