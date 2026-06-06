@@ -600,7 +600,7 @@ function loadChart(symbol, name, code) {
       horzLines: { color: c.grid },
     },
     rightPriceScale: { borderColor: c.grid, scaleMargins: { top: 0.03, bottom: 0.02 }, autoScale: true },
-    timeScale: { borderColor: c.grid, timeVisible: false, secondsVisible: false, rightOffset: 0, minBarSpacing: 0.1 },
+    timeScale: { borderColor: c.grid, timeVisible: false, secondsVisible: false, rightOffset: 12, barSpacing: 8 },
     crosshair: { mode: 0 },
   });
 
@@ -638,10 +638,8 @@ function loadChart(symbol, name, code) {
     if (markers.length) lwCandle.setMarkers(markers);
   }
 
-  lwChart.timeScale().fitContent();
-  setTimeout(() => { try { lwChart.timeScale().fitContent(); } catch(_) {} }, 100);
-  setTimeout(() => { try { lwChart.timeScale().fitContent(); } catch(_) {} }, 400);
-  setTimeout(() => { try { lwChart.timeScale().fitContent(); } catch(_) {} }, 1000);
+  // fitContent 호출 안 함 — 최근 봉 크게 보이도록 default 동작에 맡김
+  // 대신 rightOffset 12 + barSpacing 8로 최근 60봉 정도만 보이게
   const _resizeChart = () => {
     if (!lwChart || !container) return;
     const r = container.getBoundingClientRect();
@@ -649,7 +647,7 @@ function loadChart(symbol, name, code) {
     const _mobile2 = window.innerWidth <= 720; const _defH2 = _mobile2 ? 280 : 580; const h = Math.max(r.height || container.clientHeight || _defH2, 1);
     try {
       lwChart.applyOptions({ width: w, height: h });
-      lwChart.timeScale().fitContent();
+      // fitContent 제거 — 봉이 다시 압축되지 않도록
     } catch(_) {}
   };
   requestAnimationFrame(_resizeChart);
