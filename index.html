@@ -92,16 +92,7 @@ header .basedate b { color:var(--accent); }
 
 .tbl-card { background:var(--card); border:1px solid var(--line);
   border-radius:14px; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch;
-  margin:12px 0 22px; box-shadow:0 1px 3px rgba(15,23,42,.04);
-  /* Firefox */ scrollbar-width:thin; scrollbar-color:var(--line-strong, var(--line)) transparent; }
-/* WebKit (Chrome/Safari) — 주변 색에 맞춘 슬림 스크롤바 */
-.tbl-card::-webkit-scrollbar { height:8px; }
-.tbl-card::-webkit-scrollbar-track { background:transparent; }
-.tbl-card::-webkit-scrollbar-thumb {
-  background:var(--line); border-radius:4px;
-  border:2px solid var(--card); background-clip:padding-box;
-}
-.tbl-card::-webkit-scrollbar-thumb:hover { background:var(--muted, var(--text-dim, #94a3b8)); background-clip:padding-box; border:2px solid var(--card); }
+  margin:12px 0 22px; box-shadow:0 1px 3px rgba(15,23,42,.04); }
 .tbl-card table { min-width:1240px; }
 table { width:100%; border-collapse:separate; border-spacing:0; font-size:13.5px; table-layout:fixed; }
 col.c-idx{width:44px;} col.c-disc{width:120px;} col.c-name{width:200px;} col.c-mkt{width:82px;}
@@ -177,6 +168,7 @@ tbody td.empty { text-align:center; color:var(--muted); padding:36px 0; }
 [data-theme="dark"] .tf-btn.active { background:#e2e8f0; color:#0b1220; border-color:#e2e8f0; }
 .chart-wrap { height:580px; background:var(--chart-bg); position:relative; }
 #tvchart { width:100%; height:100%; }
+@media (max-width:720px) { .chart-wrap { height:280px; } }
 .chart-fallback { display:none; padding:8px 12px; height:100%; }
 .chart-fallback.show { display:block; }
 #chartSvg { width:100%; height:100%; display:block; }
@@ -194,7 +186,7 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
     <div class="sub">고점 후 눌림목 패턴 ·
       패턴 일치 <span class="pill">1종목</span> · 회복일 최신순</div>
   </div>
-  <div class="basedate">기준일 <b>2026-06-05</b> · 713종목</div>
+  <div class="basedate">기준일 <b>2026-06-06</b> · 713종목</div>
   <!-- 테마 토글은 여비또니 주식봇 허브에서 단일 컨트롤됨 -->
 </header>
 
@@ -580,7 +572,7 @@ function loadChart(symbol, name, code) {
   destroyLW();
   container.innerHTML = "";
   container.style.width = "100%";
-  container.style.height = "580px";
+  container.style.height = (window.innerWidth <= 720 ? "280px" : "580px");
   const data = STOCK_DATA[code];
   if (!data || !data.close || !data.close.length) {
     container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:'+cssVar('--muted')+';font-size:13px">차트 데이터 없음</div>';
@@ -594,7 +586,7 @@ function loadChart(symbol, name, code) {
   const c = lwColors();
   const _rect0 = container.getBoundingClientRect();
   const _w = Math.max(_rect0.width || container.clientWidth || container.parentElement?.clientWidth || window.innerWidth - 32, 320);
-  const _h = Math.max(_rect0.height || container.clientHeight || 580, 400);
+  const _isMobile = window.innerWidth <= 720; const _defaultH = _isMobile ? 280 : 580; const _minH = _isMobile ? 220 : 400; const _h = Math.max(_rect0.height || container.clientHeight || _defaultH, _minH);
   lwChart = LightweightCharts.createChart(container, {
     width: _w, height: _h,
     autoSize: false,
@@ -607,8 +599,8 @@ function loadChart(symbol, name, code) {
       vertLines: { color: c.grid },
       horzLines: { color: c.grid },
     },
-    rightPriceScale: { borderColor: c.grid, scaleMargins: { top: 0.1, bottom: 0.05 }, autoScale: true },
-    timeScale: { borderColor: c.grid, timeVisible: false, secondsVisible: false },
+    rightPriceScale: { borderColor: c.grid, scaleMargins: { top: 0.03, bottom: 0.02 }, autoScale: true },
+    timeScale: { borderColor: c.grid, timeVisible: false, secondsVisible: false, rightOffset: 2, fixLeftEdge: true, fixRightEdge: true },
     crosshair: { mode: 0 },
   });
 
@@ -646,12 +638,14 @@ function loadChart(symbol, name, code) {
     if (markers.length) lwCandle.setMarkers(markers);
   }
 
+  const _last = candles.length - 1;
+  if (_last > 0) { try { lwChart.timeScale().setVisibleLogicalRange({ from: 0, to: _last }); } catch(_) {} }
   lwChart.timeScale().fitContent();
   const _resizeChart = () => {
     if (!lwChart || !container) return;
     const r = container.getBoundingClientRect();
     const w = Math.max(r.width || container.clientWidth || (window.innerWidth - 32) || 320, 1);
-    const h = Math.max(r.height || container.clientHeight || 580, 1);
+    const _mobile2 = window.innerWidth <= 720; const _defH2 = _mobile2 ? 280 : 580; const h = Math.max(r.height || container.clientHeight || _defH2, 1);
     try {
       lwChart.applyOptions({ width: w, height: h });
       lwChart.timeScale().fitContent();
@@ -794,13 +788,10 @@ window.addEventListener("message", function(e) {
       b.classList.toggle("active", b === btn);
     });
     currentTF = btn.dataset.tf;
-    // LightweightCharts(loadChart)를 다시 그려야 timeframe 반영됨.
-    // 현재 선택된 row를 찾아서 loadChart 호출
     const sel = document.querySelector("#tbody tr.sel") || document.querySelector("#tbody tr[data-code]");
     if (sel) {
       loadChart(sel.dataset.symbol, sel.dataset.name, sel.dataset.code);
     } else if (currentCode) {
-      // fallback: SVG도 다시
       renderChart(currentCode);
     }
   });
