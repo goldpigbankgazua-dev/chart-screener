@@ -92,7 +92,16 @@ header .basedate b { color:var(--accent); }
 
 .tbl-card { background:var(--card); border:1px solid var(--line);
   border-radius:14px; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch;
-  margin:12px 0 22px; box-shadow:0 1px 3px rgba(15,23,42,.04); }
+  margin:12px 0 22px; box-shadow:0 1px 3px rgba(15,23,42,.04);
+  /* Firefox */ scrollbar-width:thin; scrollbar-color:var(--line-strong, var(--line)) transparent; }
+/* WebKit (Chrome/Safari) — 주변 색에 맞춘 슬림 스크롤바 */
+.tbl-card::-webkit-scrollbar { height:8px; }
+.tbl-card::-webkit-scrollbar-track { background:transparent; }
+.tbl-card::-webkit-scrollbar-thumb {
+  background:var(--line); border-radius:4px;
+  border:2px solid var(--card); background-clip:padding-box;
+}
+.tbl-card::-webkit-scrollbar-thumb:hover { background:var(--muted, var(--text-dim, #94a3b8)); background-clip:padding-box; border:2px solid var(--card); }
 .tbl-card table { min-width:1240px; }
 table { width:100%; border-collapse:separate; border-spacing:0; font-size:13.5px; table-layout:fixed; }
 col.c-idx{width:44px;} col.c-disc{width:120px;} col.c-name{width:200px;} col.c-mkt{width:82px;}
