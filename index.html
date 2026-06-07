@@ -901,10 +901,10 @@ document.querySelectorAll("tr[data-symbol]").forEach(function(row) {
       sel.classList.add("sel");
       try { loadChart(sel.dataset.symbol, sel.dataset.name, sel.dataset.code); } catch(_) {}
     }
-    // 수익률 기간 컨트롤은 양쪽 탭에서 항상 표시 (레이아웃 일관성)
+    // 수익률 기간 컨트롤은 눌림목 탭에서만 표시
     var retCtrl = document.querySelector("#retSel");
     if (retCtrl && retCtrl.closest(".control")) {
-      retCtrl.closest(".control").style.display = "";
+      retCtrl.closest(".control").style.display = (pat === "pullback") ? "" : "none";
     }
     // 모바일 그리드를 위해 body 클래스 토글
     document.body.classList.toggle("tab-high", pat !== "pullback");
