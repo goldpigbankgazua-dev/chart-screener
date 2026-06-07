@@ -202,17 +202,12 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
 .tbl-section { display:none; }
 .tbl-section.active { display:block; }
 
-/* 신고가 표 colgroup — 새 컬럼 순서/폭 (사이드바 차지 폭 고려) */
-.tbl-card-high col.c-idx { width:42px; }
-.tbl-card-high col.c-disc-wide { width:96px; }
-.tbl-card-high col.c-name-narrow { width:130px; }
-.tbl-card-high col.c-mkt { width:64px; }
-.tbl-card-high col.c-sec { width:auto; min-width:90px; }
-.tbl-card-high col.c-price { width:82px; }
-.tbl-card-high col.c-chg { width:74px; }
-.tbl-card-high col.c-high { width:82px; }
-.tbl-card-high col.c-cap { width:74px; }
-.tbl-card-high table { table-layout:fixed; width:100%; }
+/* 신고가 표 — 앞 5개 컬럼은 눌림목 표와 동일(c-idx/c-disc/c-name/c-mkt/c-sec 그대로 상속), 
+   뒤 4개 컬럼은 모두 112px (눌림목의 등락률 폭과 동일) */
+.tbl-card-high col.c-h-price,
+.tbl-card-high col.c-h-chg,
+.tbl-card-high col.c-h-52w,
+.tbl-card-high col.c-h-cap { width:112px; }
 .tbl-card-high td.name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .tbl-card-high td.sec { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
@@ -303,8 +298,8 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
 <div class="tbl-card tbl-card-high">
 <table>
   <colgroup>
-    <col class="c-idx"><col class="c-disc-wide"><col class="c-name-narrow"><col class="c-mkt"><col class="c-sec">
-    <col class="c-price"><col class="c-chg"><col class="c-high"><col class="c-cap">
+    <col class="c-idx"><col class="c-disc"><col class="c-name"><col class="c-mkt"><col class="c-sec">
+    <col class="c-h-price"><col class="c-h-chg"><col class="c-h-52w"><col class="c-h-cap">
   </colgroup>
   <thead>
     <tr>
