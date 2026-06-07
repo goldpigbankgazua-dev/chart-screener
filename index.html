@@ -83,6 +83,10 @@ header .basedate b { color:var(--accent); }
 /* ===== RS와 동일한 pill 컨트롤 ===== */
 .controls { display:grid; grid-template-columns:1fr; gap:8px; background:transparent; border:0; padding:0; margin:14px 0 10px; }
 @media (min-width:720px) { .controls { grid-template-columns:1.6fr 1fr 1.2fr; gap:8px; } }
+@media (max-width:720px) {
+  .controls { grid-template-columns:1fr 1fr !important; gap:8px !important; }
+  .controls > .control:first-child { grid-column:1 / -1 !important; }
+}
 .control { display:flex; align-items:stretch; background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; height:40px; min-width:0; transition:border-color .12s ease, box-shadow .12s ease; }
 .control:hover { border-color:var(--muted-2); }
 .control:focus-within { border-color:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,.15); }
