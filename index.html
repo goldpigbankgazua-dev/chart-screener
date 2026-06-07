@@ -168,11 +168,7 @@ tbody td.empty { text-align:center; color:var(--muted); padding:36px 0; }
 [data-theme="dark"] .tf-btn.active { background:#e2e8f0; color:#0b1220; border-color:#e2e8f0; }
 .chart-wrap { height:580px; background:var(--chart-bg); position:relative; }
 #tvchart { width:100%; height:100%; }
-<<<<<<< Updated upstream
 @media (max-width:720px) { .chart-wrap { height:280px; } }
-=======
-@media (max-width:720px) { .chart-wrap { height:320px; } }
->>>>>>> Stashed changes
 .chart-fallback { display:none; padding:8px 12px; height:100%; }
 .chart-fallback.show { display:block; }
 #chartSvg { width:100%; height:100%; display:block; }
@@ -190,11 +186,7 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
     <div class="sub">고점 후 눌림목 패턴 ·
       패턴 일치 <span class="pill">1종목</span> · 회복일 최신순</div>
   </div>
-<<<<<<< Updated upstream
   <div class="basedate">기준일 <b>2026-06-07</b> · 713종목</div>
-=======
-  <div class="basedate">기준일 <b>2026-06-06</b> · 713종목</div>
->>>>>>> Stashed changes
   <!-- 테마 토글은 여비또니 주식봇 허브에서 단일 컨트롤됨 -->
 </header>
 
@@ -580,11 +572,7 @@ function loadChart(symbol, name, code) {
   destroyLW();
   container.innerHTML = "";
   container.style.width = "100%";
-<<<<<<< Updated upstream
   container.style.height = (window.innerWidth <= 720 ? "280px" : "580px");
-=======
-  container.style.height = (window.innerWidth <= 720 ? "320px" : "580px");
->>>>>>> Stashed changes
   const data = STOCK_DATA[code];
   if (!data || !data.close || !data.close.length) {
     container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:'+cssVar('--muted')+';font-size:13px">차트 데이터 없음</div>';
@@ -598,11 +586,7 @@ function loadChart(symbol, name, code) {
   const c = lwColors();
   const _rect0 = container.getBoundingClientRect();
   const _w = Math.max(_rect0.width || container.clientWidth || container.parentElement?.clientWidth || window.innerWidth - 32, 320);
-<<<<<<< Updated upstream
   const _isMobile = window.innerWidth <= 720; const _defaultH = _isMobile ? 280 : 580; const _minH = _isMobile ? 220 : 400; const _h = Math.max(_rect0.height || container.clientHeight || _defaultH, _minH);
-=======
-  const _isMobile = window.innerWidth <= 720; const _defaultH = _isMobile ? 320 : 580; const _minH = _isMobile ? 260 : 400; const _h = Math.max(_rect0.height || container.clientHeight || _defaultH, _minH);
->>>>>>> Stashed changes
   lwChart = LightweightCharts.createChart(container, {
     width: _w, height: _h,
     autoSize: false,
@@ -700,11 +684,7 @@ function loadChart(symbol, name, code) {
     if (!lwChart || !container) return;
     const r = container.getBoundingClientRect();
     const w = Math.max(r.width || container.clientWidth || (window.innerWidth - 32) || 320, 1);
-<<<<<<< Updated upstream
     const _mobile2 = window.innerWidth <= 720; const _defH2 = _mobile2 ? 280 : 580; const h = Math.max(r.height || container.clientHeight || _defH2, 1);
-=======
-    const _mobile2 = window.innerWidth <= 720; const _defH2 = _mobile2 ? 320 : 580; const h = Math.max(r.height || container.clientHeight || _defH2, 1);
->>>>>>> Stashed changes
     try {
       lwChart.applyOptions({ width: w, height: h });
       // fitContent 제거 — 봉이 다시 압축되지 않도록
