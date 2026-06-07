@@ -260,7 +260,6 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
 <div class="pat-tabs" id="patTabs">
   <button class="pat-tab active" data-pat="pullback">눌림목 <span class="pat-count" id="cntPullback">1</span></button>
   <button class="pat-tab" data-pat="w52">52주 신고가 <span class="pat-count" id="cntW52">—</span></button>
-  <button class="pat-tab" data-pat="all_time">올타임 신고가 <span class="pat-count" id="cntAll">—</span></button>
 </div>
 
 <div class="tbl-section active" data-tab="pullback">
@@ -303,8 +302,8 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
 <table>
   <colgroup>
     <col class="c-idx"><col class="c-disc"><col class="c-name"><col class="c-mkt"><col class="c-sec">
-    <col class="c-cap"><col class="c-type">
-    <col class="c-price"><col class="c-high"><col class="c-high"><col class="c-chg">
+    <col class="c-cap">
+    <col class="c-price"><col class="c-high"><col class="c-chg">
   </colgroup>
   <thead>
     <tr>
@@ -314,27 +313,25 @@ footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:cente
       <th class="center">시장</th>
       <th class="left">섹터</th>
       <th>시총</th>
-      <th>구분</th>
       <th>현재가</th>
       <th>52주 최고</th>
-      <th>올타임 최고</th>
       <th>등락률</th>
     </tr>
   </thead>
   <tbody id="tbodyHigh">
-<tr data-symbol="KRX:105560" data-name="KB금융" data-code="105560" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">1</td><td class="num date discovered">2026-06-07</td><td class="name">KB금융<span class="code">105560</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">63.98조</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">171,600</td><td class="num">175,700</td><td class="num">175,700</td><td class="num pos">+4.51%</td></tr>
-<tr data-symbol="KRX:055550" data-name="신한지주" data-code="055550" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">2</td><td class="num date discovered">2026-06-07</td><td class="name">신한지주<span class="code">055550</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">51.03조</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">107,500</td><td class="num">109,800</td><td class="num">109,800</td><td class="num pos">+7.39%</td></tr>
-<tr data-symbol="KRX:004170" data-name="신세계" data-code="004170" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">3</td><td class="num date discovered">2026-06-07</td><td class="name">신세계<span class="code">004170</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">6.14조</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">650,000</td><td class="num">722,000</td><td class="num">722,000</td><td class="num neg">−1.37%</td></tr>
-<tr data-symbol="KRX:023530" data-name="롯데쇼핑" data-code="023530" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">4</td><td class="num date discovered">2026-06-07</td><td class="name">롯데쇼핑<span class="code">023530</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">4.89조</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">173,000</td><td class="num">180,200</td><td class="num">180,200</td><td class="num pos">+0.58%</td></tr>
-<tr data-symbol="KRX:069960" data-name="현대백화점" data-code="069960" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">5</td><td class="num date discovered">2026-06-07</td><td class="name">현대백화점<span class="code">069960</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">3.16조</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">146,500</td><td class="num">155,900</td><td class="num">155,900</td><td class="num pos">+4.79%</td></tr>
-<tr data-symbol="KRX:085620" data-name="미래에셋생명" data-code="085620" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">6</td><td class="num date discovered">2026-06-07</td><td class="name">미래에셋생명<span class="code">085620</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">2.51조</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">18,590</td><td class="num">24,200</td><td class="num">24,200</td><td class="num neg">−4.22%</td></tr>
-<tr data-symbol="KRX:479080" data-name="1Q 머니마켓액티브" data-code="479080" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">7</td><td class="num date discovered">2026-06-07</td><td class="name">1Q 머니마켓액티브<span class="code">479080</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">8,734억</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">53,340</td><td class="num">53,340</td><td class="num">53,340</td><td class="num pos">+0.02%</td></tr>
-<tr data-symbol="KRX:426020" data-name="TIME 미국S&P500액티브" data-code="426020" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">8</td><td class="num date discovered">2026-06-07</td><td class="name">TIME 미국S&P500액티브<span class="code">426020</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">3,884억</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">36,785</td><td class="num">37,070</td><td class="num">37,070</td><td class="num neg">−0.05%</td></tr>
-<tr data-symbol="KRX:319660" data-name="피에스케이" data-code="319660" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">9</td><td class="num date discovered">2026-06-07</td><td class="name">피에스케이<span class="code">319660</span></td><td class="mkt kosdaq"><span>KOSDAQ</span></td><td class="sec">—</td><td class="num">3.66조</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">126,500</td><td class="num">132,500</td><td class="num">132,500</td><td class="num pos">+10.58%</td></tr>
-<tr data-symbol="KRX:084370" data-name="유진테크" data-code="084370" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">10</td><td class="num date discovered">2026-06-07</td><td class="name">유진테크<span class="code">084370</span></td><td class="mkt kosdaq"><span>KOSDAQ</span></td><td class="sec">—</td><td class="num">3.60조</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">156,900</td><td class="num">164,200</td><td class="num">164,200</td><td class="num pos">+0.77%</td></tr>
-<tr data-symbol="KRX:095610" data-name="테스" data-code="095610" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">11</td><td class="num date discovered">2026-06-07</td><td class="name">테스<span class="code">095610</span></td><td class="mkt kosdaq"><span>KOSDAQ</span></td><td class="sec">—</td><td class="num">2.69조</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">139,200</td><td class="num">154,300</td><td class="num">154,300</td><td class="num pos">+2.43%</td></tr>
-<tr data-symbol="KRX:089970" data-name="브이엠" data-code="089970" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">12</td><td class="num date discovered">2026-06-07</td><td class="name">브이엠<span class="code">089970</span></td><td class="mkt kosdaq"><span>KOSDAQ</span></td><td class="sec">—</td><td class="num">1.68조</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">68,000</td><td class="num">74,300</td><td class="num">74,300</td><td class="num neg">−2.16%</td></tr>
-<tr data-symbol="KRX:090360" data-name="로보스타" data-code="090360" data-first-seen="2026-06-07" data-high-type="all_time"><td class="num idx">13</td><td class="num date discovered">2026-06-07</td><td class="name">로보스타<span class="code">090360</span></td><td class="mkt kosdaq"><span>KOSDAQ</span></td><td class="sec">—</td><td class="num">1.44조</td><td class="type"><span class="badge-high all">올타임</span></td><td class="num">148,100</td><td class="num">171,600</td><td class="num">171,600</td><td class="num pos">+6.39%</td></tr>
+<tr data-symbol="KRX:105560" data-name="KB금융" data-code="105560" data-first-seen="2026-06-07"><td class="num idx">1</td><td class="num date discovered">2026-06-07</td><td class="name">KB금융<span class="code">105560</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">63.98조</td><td class="num">171,600</td><td class="num">175,700</td><td class="num pos">+4.51%</td></tr>
+<tr data-symbol="KRX:055550" data-name="신한지주" data-code="055550" data-first-seen="2026-06-07"><td class="num idx">2</td><td class="num date discovered">2026-06-07</td><td class="name">신한지주<span class="code">055550</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">51.03조</td><td class="num">107,500</td><td class="num">109,800</td><td class="num pos">+7.39%</td></tr>
+<tr data-symbol="KRX:004170" data-name="신세계" data-code="004170" data-first-seen="2026-06-07"><td class="num idx">3</td><td class="num date discovered">2026-06-07</td><td class="name">신세계<span class="code">004170</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">6.14조</td><td class="num">650,000</td><td class="num">722,000</td><td class="num neg">−1.37%</td></tr>
+<tr data-symbol="KRX:023530" data-name="롯데쇼핑" data-code="023530" data-first-seen="2026-06-07"><td class="num idx">4</td><td class="num date discovered">2026-06-07</td><td class="name">롯데쇼핑<span class="code">023530</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">4.89조</td><td class="num">173,000</td><td class="num">180,200</td><td class="num pos">+0.58%</td></tr>
+<tr data-symbol="KRX:069960" data-name="현대백화점" data-code="069960" data-first-seen="2026-06-07"><td class="num idx">5</td><td class="num date discovered">2026-06-07</td><td class="name">현대백화점<span class="code">069960</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">3.16조</td><td class="num">146,500</td><td class="num">155,900</td><td class="num pos">+4.79%</td></tr>
+<tr data-symbol="KRX:085620" data-name="미래에셋생명" data-code="085620" data-first-seen="2026-06-07"><td class="num idx">6</td><td class="num date discovered">2026-06-07</td><td class="name">미래에셋생명<span class="code">085620</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">2.51조</td><td class="num">18,590</td><td class="num">24,200</td><td class="num neg">−4.22%</td></tr>
+<tr data-symbol="KRX:479080" data-name="1Q 머니마켓액티브" data-code="479080" data-first-seen="2026-06-07"><td class="num idx">7</td><td class="num date discovered">2026-06-07</td><td class="name">1Q 머니마켓액티브<span class="code">479080</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">8,734억</td><td class="num">53,340</td><td class="num">53,340</td><td class="num pos">+0.02%</td></tr>
+<tr data-symbol="KRX:426020" data-name="TIME 미국S&P500액티브" data-code="426020" data-first-seen="2026-06-07"><td class="num idx">8</td><td class="num date discovered">2026-06-07</td><td class="name">TIME 미국S&P500액티브<span class="code">426020</span></td><td class="mkt kospi"><span>KOSPI</span></td><td class="sec">—</td><td class="num">3,884억</td><td class="num">36,785</td><td class="num">37,070</td><td class="num neg">−0.05%</td></tr>
+<tr data-symbol="KRX:319660" data-name="피에스케이" data-code="319660" data-first-seen="2026-06-07"><td class="num idx">9</td><td class="num date discovered">2026-06-07</td><td class="name">피에스케이<span class="code">319660</span></td><td class="mkt kosdaq"><span>KOSDAQ</span></td><td class="sec">—</td><td class="num">3.66조</td><td class="num">126,500</td><td class="num">132,500</td><td class="num pos">+10.58%</td></tr>
+<tr data-symbol="KRX:084370" data-name="유진테크" data-code="084370" data-first-seen="2026-06-07"><td class="num idx">10</td><td class="num date discovered">2026-06-07</td><td class="name">유진테크<span class="code">084370</span></td><td class="mkt kosdaq"><span>KOSDAQ</span></td><td class="sec">—</td><td class="num">3.60조</td><td class="num">156,900</td><td class="num">164,200</td><td class="num pos">+0.77%</td></tr>
+<tr data-symbol="KRX:095610" data-name="테스" data-code="095610" data-first-seen="2026-06-07"><td class="num idx">11</td><td class="num date discovered">2026-06-07</td><td class="name">테스<span class="code">095610</span></td><td class="mkt kosdaq"><span>KOSDAQ</span></td><td class="sec">—</td><td class="num">2.69조</td><td class="num">139,200</td><td class="num">154,300</td><td class="num pos">+2.43%</td></tr>
+<tr data-symbol="KRX:089970" data-name="브이엠" data-code="089970" data-first-seen="2026-06-07"><td class="num idx">12</td><td class="num date discovered">2026-06-07</td><td class="name">브이엠<span class="code">089970</span></td><td class="mkt kosdaq"><span>KOSDAQ</span></td><td class="sec">—</td><td class="num">1.68조</td><td class="num">68,000</td><td class="num">74,300</td><td class="num neg">−2.16%</td></tr>
+<tr data-symbol="KRX:090360" data-name="로보스타" data-code="090360" data-first-seen="2026-06-07"><td class="num idx">13</td><td class="num date discovered">2026-06-07</td><td class="name">로보스타<span class="code">090360</span></td><td class="mkt kosdaq"><span>KOSDAQ</span></td><td class="sec">—</td><td class="num">1.44조</td><td class="num">148,100</td><td class="num">171,600</td><td class="num pos">+6.39%</td></tr>
   </tbody>
 </table>
 </div>
@@ -875,16 +872,8 @@ document.querySelectorAll("tr[data-symbol]").forEach(function(row) {
   var sections = document.querySelectorAll(".tbl-section");
   var highRows = document.querySelectorAll("#tbodyHigh tr[data-symbol]");
   // 카운트 업데이트
-  var c52 = 0, cAll = 0;
-  highRows.forEach(function(r){
-    var t = r.dataset.highType;
-    if (t === "all_time") { cAll++; c52++; }  // 올타임은 자동으로 52주이기도 함
-    else if (t === "w52") { c52++; }
-  });
   var elCnt52 = document.getElementById("cntW52");
-  var elCntAll = document.getElementById("cntAll");
-  if (elCnt52) elCnt52.textContent = c52;
-  if (elCntAll) elCntAll.textContent = cAll;
+  if (elCnt52) elCnt52.textContent = highRows.length;
 
   function activatePat(pat) {
     tabs.forEach(function(t){ t.classList.toggle("active", t.dataset.pat === pat); });
@@ -894,17 +883,7 @@ document.querySelectorAll("tr[data-symbol]").forEach(function(row) {
       if (pat === "pullback") sec.classList.toggle("active", tab === "pullback");
       else sec.classList.toggle("active", tab === "w52");  // w52 섹션 = 신고가 표
     });
-    // 신고가 표 행 필터링 (type별)
-    if (pat !== "pullback") {
-      highRows.forEach(function(r) {
-        var t = r.dataset.highType;
-        var show;
-        if (pat === "w52") show = true;  // 52주 탭은 모두 표시 (올타임도 52주 신고가)
-        else if (pat === "all_time") show = (t === "all_time");
-        else show = true;
-        r.style.display = show ? "" : "none";
-      });
-    }
+    // 신고가 행 필터링 제거 — 52주 탭만 있으므로 모두 표시
     // 활성 탭의 첫 보이는 행 자동 선택 → 차트 갱신
     var sel;
     if (pat === "pullback") {
