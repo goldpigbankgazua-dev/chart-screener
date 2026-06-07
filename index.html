@@ -67,6 +67,11 @@ header .basedate b { color:var(--accent); }
   header h1 { font-size:19px; }
   header { gap:8px; }
   header .basedate { font-size:11px; padding:5px 10px; }
+  /* 모바일 controls 2열 그리드: 검색은 첫줄 full, 기간/수익률이 둘째줄 반반 */
+  .controls { grid-template-columns:1fr 1fr; gap:8px; }
+  .controls .control:nth-child(1) { grid-column:1 / -1; }
+  /* 신고가 탭에서는 수익률 hidden — 기간을 2칸 span해서 전체폭 사용 */
+  body.tab-high .controls .control:nth-child(2) { grid-column:1 / -1; }
 }
 
 .theme-switch { display:flex; gap:3px; background:var(--card); border:1px solid var(--line);
@@ -899,6 +904,8 @@ document.querySelectorAll("tr[data-symbol]").forEach(function(row) {
     if (retCtrl && retCtrl.closest(".control")) {
       retCtrl.closest(".control").style.display = (pat === "pullback") ? "" : "none";
     }
+    // 모바일 그리드를 위해 body 클래스 토글
+    document.body.classList.toggle("tab-high", pat !== "pullback");
   }
 
   tabs.forEach(function(t) {
