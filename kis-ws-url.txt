@@ -1,1 +1,1 @@
-wss://instance-20260604-1941.tail6e4c31.ts.net
+wss://ip-172-26-1-188.tail6e4c31.ts.net
