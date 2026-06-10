@@ -17,7 +17,7 @@
   --kosdaq-bg:#ede9fe; --kosdaq:#7c3aed;
   --switch-active-bg:#e0f2fe; --switch-active-fg:#0f172a;
   --grid:#e2e8f0; --close:#0f172a; --ma20:#e8820c; --ma120:#9467bd;
-  --below-band:rgba(125,200,160,.18);
+  --below-band:rgba(125,200,160,.18); --accent:#0ea5e9;
 }
 body.theme-dark {
   --bg:#0b1220; --card:#121a2b; --ink:#e2e8f0; --muted:#94a3b8; --muted-2:#64748b;
@@ -30,7 +30,7 @@ body.theme-dark {
   --kosdaq-bg:#4c1d95; --kosdaq:#ddd6fe;
   --switch-active-bg:#1e2a4a; --switch-active-fg:#e2e8f0;
   --grid:#1f2a44; --close:#e2e8f0; --ma20:#fbbf24; --ma120:#a78bfa;
-  --below-band:rgba(74,222,128,.10);
+  --below-band:rgba(74,222,128,.10); --accent:#38bdf8;
 }
 body.theme-green {
   --bg:#ecfdf5; --card:#ffffff; --ink:#064e3b; --muted:#047857; --muted-2:#10b981;
@@ -62,7 +62,7 @@ header .pill { display:inline-block; padding:2px 8px; border-radius:6px;
   background:var(--pill-bg); color:var(--pill-fg); font-weight:600; font-size:12px; margin-left:4px; }
 header .basedate { color:var(--muted); background:var(--card); border:1px solid var(--line);
   padding:6px 12px; border-radius:8px; font-size:12px; white-space:nowrap; flex-shrink:0; }
-header .basedate b { color:var(--ink); }
+header .basedate b { color:var(--accent); }
 @media (max-width:720px){
   header h1 { font-size:19px; }
   header { gap:8px; }
