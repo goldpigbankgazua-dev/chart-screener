@@ -1,7 +1,54 @@
 {
-  "generated_at": "2026-06-10T15:17:27",
-  "scanned": 686,
-  "matched": 0,
+  "generated_at": "2026-06-11T09:52:34",
+  "scanned": 704,
+  "matched": 2,
   "errors": 0,
-  "matches": []
+  "matches": [
+    {
+      "name": "한솔케미칼",
+      "code": "014680",
+      "market": "KOSPI",
+      "sector": "화학",
+      "cap_eok": 33656,
+      "peak_date": "20260227",
+      "peak_close": 338000,
+      "trough": 230000,
+      "decline_pct": 32.0,
+      "below_len": 14,
+      "reclaim_date": "20260611",
+      "hold": 1,
+      "gap_pct": 14.2,
+      "vol_ratio": 2.5,
+      "returns": {
+        "r1m": 6.093189964157706,
+        "r3m": -0.16863406408094433,
+        "r6m": 20.570264765784113,
+        "r1y": 138.90234059725586,
+        "rytd": 23.333333333333332
+      }
+    },
+    {
+      "name": "iM금융지주",
+      "code": "139130",
+      "market": "KOSPI",
+      "sector": "은행",
+      "cap_eok": 29426,
+      "peak_date": "20260220",
+      "peak_close": 21650,
+      "trough": 16600,
+      "decline_pct": 23.3,
+      "below_len": 20,
+      "reclaim_date": "20260611",
+      "hold": 1,
+      "gap_pct": 18.2,
+      "vol_ratio": 2.3,
+      "returns": {
+        "r1m": -4.732189287571503,
+        "r3m": 7.071887784921099,
+        "r6m": 25.565455791638108,
+        "r1y": 71.37511693171189,
+        "rytd": 19.660352710646638
+      }
+    }
+  ]
 }
