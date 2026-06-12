@@ -931,7 +931,83 @@ document.querySelectorAll("tr[data-symbol]").forEach(function(row) {
   });
 });
 
-// 패턴 탭 전환 (눌림목 / 52주 / 올타임)
+// 거래량 증가 종목 검출 (오늘 거래량 / 최근 20일 평균 >= VOL_SURGE_MULT)
+const VOL_SURGE_MULT = 50;  // 평균 대비 N배
+(function buildVolumeSurge() {
+  if (typeof STOCK_DATA === "undefined") return;
+  const tbody = document.getElementById("tbodyVolume");
+  if (!tbody) return;
+  const results = [];
+  for (const code in STOCK_DATA) {
+    const d = STOCK_DATA[code];
+    if (!d || !d.volume || !d.volume.length) continue;
+    const n = d.volume.length;
+    if (n < 21) continue;
+    const last = d.volume[n - 1];
+    if (!last || last <= 0) continue;
+    let sum = 0, cnt = 0;
+    for (let i = Math.max(0, n - 21); i < n - 1; i++) {
+      const v = d.volume[i];
+      if (v && v > 0) { sum += v; cnt++; }
+    }
+    if (cnt < 10) continue;
+    const avg = sum / cnt;
+    if (avg <= 0) continue;
+    const ratio = last / avg;
+    if (ratio < VOL_SURGE_MULT) continue;
+    // 종목 정보 — name/market/sector/close/cap 은 STOCK_DATA 에 있어야 함
+    const close = d.close[n - 1];
+    const prev = n > 1 ? d.close[n - 2] : null;
+    const chgPct = (prev && prev > 0) ? ((close - prev) / prev * 100) : null;
+    results.push({ code, ratio, close, chgPct, info: d });
+  }
+  // 배수 큰 순 정렬
+  results.sort((a, b) => b.ratio - a.ratio);
+  const cntEl = document.getElementById("cntVolSurge");
+  if (cntEl) cntEl.textContent = results.length;
+  // 행 렌더링
+  const today = (function(){ const t = new Date(); return t.toISOString().slice(0,10); })();
+  function escape(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]); }
+  function fmtNum(n) { return Math.round(n).toLocaleString("ko-KR"); }
+  function fmtCap(eok) {
+    if (!eok) return "—";
+    if (eok >= 10000) return (eok / 10000).toFixed(2) + "조";
+    return Math.round(eok).toLocaleString("ko-KR") + "억";
+  }
+  let html = "";
+  results.forEach((r, i) => {
+    const info = r.info;
+    const name = info.name || r.code;
+    const market = info.market || "";
+    const sector = info.sector || "—";
+    const cap = info.cap || info.cap_eok || 0;
+    const chgClass = r.chgPct == null ? "" : (r.chgPct >= 0 ? "pos" : "neg");
+    const chgSign = r.chgPct == null ? "" : (r.chgPct >= 0 ? "+" : "");
+    const chgStr = r.chgPct == null ? "—" : `${chgSign}${r.chgPct.toFixed(2)}%`.replace("-","−");
+    html += `<tr data-symbol="KRX:${r.code}" data-name="${escape(name)}" data-code="${r.code}" data-first-seen="${today}">`+
+      `<td class="num idx">${i+1}</td>`+
+      `<td class="num date discovered">${today}</td>`+
+      `<td class="name">${escape(name)}<span class="code">${r.code}</span></td>`+
+      `<td class="mkt ${market.toLowerCase()}"><span>${escape(market)}</span></td>`+
+      `<td class="sec">${escape(sector)}</td>`+
+      `<td class="num">${fmtNum(r.close)}</td>`+
+      `<td class="num ${chgClass}">${chgStr}</td>`+
+      `<td class="num"><b>×${r.ratio.toFixed(1)}</b></td>`+
+      `<td class="num">${fmtCap(cap)}</td>`+
+      `</tr>`;
+  });
+  tbody.innerHTML = html || `<tr><td colspan="9" style="padding:20px;text-align:center;color:var(--muted);font-size:13px">평균 거래량 대비 ${VOL_SURGE_MULT}배 이상인 종목 없음</td></tr>`;
+  // 새 행에도 클릭 핸들러
+  tbody.querySelectorAll("tr[data-symbol]").forEach(function(row) {
+    row.addEventListener("click", function() {
+      document.querySelectorAll("tr.sel").forEach(function(r){ r.classList.remove("sel"); });
+      row.classList.add("sel");
+      try { loadChart(row.dataset.symbol, row.dataset.name, row.dataset.code); } catch(_) {}
+    });
+  });
+})();
+
+// 패턴 탭 전환 (눌림목 / 52주 / 거래량 증가)
 (function setupPatTabs() {
   var tabs = document.querySelectorAll(".pat-tab");
   var sections = document.querySelectorAll(".tbl-section");
@@ -942,17 +1018,16 @@ document.querySelectorAll("tr[data-symbol]").forEach(function(row) {
 
   function activatePat(pat) {
     tabs.forEach(function(t){ t.classList.toggle("active", t.dataset.pat === pat); });
-    // 섹션 표시: pullback이면 pullback 섹션, 그 외(w52/all_time)는 신고가 섹션
+    // 섹션 표시: pat 값과 data-tab 매칭
     sections.forEach(function(sec) {
-      var tab = sec.dataset.tab;
-      if (pat === "pullback") sec.classList.toggle("active", tab === "pullback");
-      else sec.classList.toggle("active", tab === "w52");  // w52 섹션 = 신고가 표
+      sec.classList.toggle("active", sec.dataset.tab === pat);
     });
-    // 신고가 행 필터링 제거 — 52주 탭만 있으므로 모두 표시
     // 활성 탭의 첫 보이는 행 자동 선택 → 차트 갱신
     var sel;
     if (pat === "pullback") {
       sel = document.querySelector("#tbody tr[data-symbol]");
+    } else if (pat === "vol_surge") {
+      sel = document.querySelector("#tbodyVolume tr[data-symbol]");
     } else {
       sel = Array.from(document.querySelectorAll("#tbodyHigh tr[data-symbol]"))
               .find(function(r) { return r.style.display !== "none"; });
