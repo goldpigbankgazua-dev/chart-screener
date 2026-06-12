@@ -701,7 +701,7 @@ function loadChart(symbol, name, code) {
   const _rect0 = container.getBoundingClientRect();
   const _rawW = _rect0.width || container.clientWidth || container.parentElement?.clientWidth || window.innerWidth - 32;
   const _isMobile0 = window.innerWidth <= 720;
-  const _safetyMargin = _isMobile0 ? 56 : 24;
+  const _safetyMargin = _isMobile0 ? 80 : 32;
   const _w = Math.max(Math.min(_rawW, window.innerWidth - _safetyMargin), 280);
   const _isMobile = window.innerWidth <= 720; const _defaultH = _isMobile ? 280 : 580; const _minH = _isMobile ? 220 : 400; const _h = Math.max(_rect0.height || container.clientHeight || _defaultH, _minH);
   lwChart = LightweightCharts.createChart(container, {
