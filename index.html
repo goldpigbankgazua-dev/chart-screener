@@ -874,7 +874,7 @@ function applyTheme(name) {
     b.classList.toggle("active", b.dataset.theme === name);
   });
   // 차트 색만 갱신 (재생성)
-  const sel = document.querySelector("#tbody tr.sel");
+  const sel = document.querySelector("#tbody tr.sel, #tbodyHigh tr.sel");
   if (sel && sel.dataset.code) {
     loadChart(sel.dataset.symbol, sel.dataset.name, sel.dataset.code);
   }
@@ -966,7 +966,7 @@ window.addEventListener("message", function(e) {
   window.addEventListener("resize", function(){
     const fb = document.getElementById("chartFallback");
     if (fb && fb.classList.contains("show")) {
-      const sel = document.querySelector("#tbody tr.sel");
+      const sel = document.querySelector("#tbody tr.sel, #tbodyHigh tr.sel");
       if (sel) renderChart(sel.dataset.code);
     }
   });
@@ -986,7 +986,7 @@ window.addEventListener("message", function(e) {
       b.classList.toggle("active", b === btn);
     });
     currentTF = btn.dataset.tf;
-    const sel = document.querySelector("#tbody tr.sel") || document.querySelector("#tbody tr[data-code]");
+    const sel = document.querySelector("#tbody tr.sel, #tbodyHigh tr.sel") || document.querySelector("#tbody tr[data-code]");
     if (sel) {
       loadChart(sel.dataset.symbol, sel.dataset.name, sel.dataset.code);
     } else if (currentCode) {
@@ -1020,7 +1020,7 @@ function fmtKR(n) {
 
 function applyLiveTick(ev) {
   applyTickToCandle(ev);  // 실시간 봉 갱신
-  const sel = document.querySelector("#tbody tr.sel");
+  const sel = document.querySelector("#tbody tr.sel, #tbodyHigh tr.sel");
   if (!sel || sel.dataset.code !== ev.code) return;
   const tile = document.getElementById("liveTile");
   const pEl = document.getElementById("livePrice");
@@ -1093,7 +1093,7 @@ async function kisConnect() {
   kisWs.addEventListener("open", () => {
     setConn("ok", "실시간 연결됨");
     kisRetryMs = 1500;
-    const sel = document.querySelector("#tbody tr.sel");
+    const sel = document.querySelector("#tbody tr.sel, #tbodyHigh tr.sel");
     if (sel && sel.dataset.code) kisSubscribe(sel.dataset.code);
   });
   kisWs.addEventListener("message", (e) => {
