@@ -186,12 +186,12 @@ tbody td.empty { text-align:center; color:var(--muted); padding:36px 0; }
 footer { margin-top:18px; color:var(--muted); font-size:11.5px; text-align:center; }
 
 /* 패턴 탭 바 (눌림목 / 52주신고가 / 올타임신고가) */
-.pat-tabs { display:flex; gap:6px; padding:6px; margin:0 0 12px;
+.pat-tabs { display:flex; gap:6px; padding:3px; margin:0 0 12px;
   background:var(--card); border:1px solid var(--line); border-radius:10px;
   box-shadow:0 1px 2px rgba(15,23,42,.04); }
 .pat-tab { flex:1; appearance:none; border:none; background:transparent;
   font:inherit; font-size:13px; font-weight:600; color:var(--muted);
-  padding:9px 12px; border-radius:7px; cursor:pointer; transition:all .12s ease; }
+  padding:6px 12px; line-height:24px; border-radius:7px; cursor:pointer; transition:all .12s ease; }
 .pat-tab:hover { color:var(--ink); background:var(--thead); }
 .pat-tab.active { color:var(--card); background:var(--ink); }
 [data-theme="dark"] .pat-tab.active { color:#0b1220; background:#e2e8f0; }
