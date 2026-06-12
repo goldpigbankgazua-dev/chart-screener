@@ -701,8 +701,9 @@ function loadChart(symbol, name, code) {
   const _rect0 = container.getBoundingClientRect();
   const _rawW = _rect0.width || container.clientWidth || container.parentElement?.clientWidth || window.innerWidth - 32;
   const _isMobile0 = window.innerWidth <= 720;
-  const _safetyMargin = _isMobile0 ? 80 : 32;
-  const _w = Math.max(Math.min(_rawW, window.innerWidth - _safetyMargin), 280);
+  // 가격축 라벨이 우측 끝에 닿아 잘리는 거 방지 — width 명시적으로 줄임
+  const _priceLabelReserve = _isMobile0 ? 70 : 60;
+  const _w = Math.max(_rawW - _priceLabelReserve, 280);
   const _isMobile = window.innerWidth <= 720; const _defaultH = _isMobile ? 280 : 580; const _minH = _isMobile ? 220 : 400; const _h = Math.max(_rect0.height || container.clientHeight || _defaultH, _minH);
   lwChart = LightweightCharts.createChart(container, {
     width: _w, height: _h,
