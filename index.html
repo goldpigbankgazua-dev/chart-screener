@@ -706,7 +706,7 @@ function loadChart(symbol, name, code) {
   const _isMobile = window.innerWidth <= 720; const _defaultH = _isMobile ? 280 : 580; const _minH = _isMobile ? 220 : 400; const _h = Math.max(_rect0.height || container.clientHeight || _defaultH, _minH);
   lwChart = LightweightCharts.createChart(container, {
     width: _w, height: _h,
-    autoSize: false,
+    autoSize: true,
     layout: {
       background: { type: "solid", color: cssVar("--chart-bg") || (c.isDark ? "#0f1626" : "#fafbfc") },
       textColor: c.muted,
@@ -960,12 +960,17 @@ window.addEventListener("message", function(e) {
   applyTheme((saved && THEMES.indexOf(saved) >= 0) ? saved : "green");
   applyReturnPeriod("r3m");
   const first = document.querySelector("#tbody tr[data-symbol]");
-  if (first) {
-    first.classList.add("sel");
-    loadChart(first.dataset.symbol, first.dataset.name, first.dataset.code);
-  } else {
-    loadChart("KRX:000720", "현대건설", "000720");
-  }
+  if (first) first.classList.add("sel");
+  // 첫 loadChart 호출을 layout 완료 후로 지연 — 첫 진입 시 차트 width 잘못 측정 방지
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      if (first) {
+        loadChart(first.dataset.symbol, first.dataset.name, first.dataset.code);
+      } else {
+        loadChart("KRX:000720", "현대건설", "000720");
+      }
+    });
+  });
   window.addEventListener("resize", function(){
     const fb = document.getElementById("chartFallback");
     if (fb && fb.classList.contains("show")) {
