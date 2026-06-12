@@ -986,7 +986,7 @@ window.addEventListener("message", function(e) {
       b.classList.toggle("active", b === btn);
     });
     currentTF = btn.dataset.tf;
-    const sel = document.querySelector("#tbody tr.sel, #tbodyHigh tr.sel") || document.querySelector("#tbody tr[data-code]");
+    const sel = document.querySelector("#tbody tr.sel, #tbodyHigh tr.sel") || document.querySelector(".tbl-section.active tbody tr[data-code]");
     if (sel) {
       loadChart(sel.dataset.symbol, sel.dataset.name, sel.dataset.code);
     } else if (currentCode) {
