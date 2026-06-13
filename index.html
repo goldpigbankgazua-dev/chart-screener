@@ -466,10 +466,8 @@ document.getElementById("retSel").addEventListener("change", function(e){
   applyReturnPeriod(e.target.value);
 });
 
-// ─── 발견일 기간 필터 ───
+// ─── 발견일 기간 필터 — 3 tbody 모두 (눌림목, 52주, 거래량 급증) ───
 function applyPeriodFilter(period) {
-  const rows = Array.from(document.querySelectorAll("#tbody tr[data-first-seen]"));
-  if (!rows.length) return;
   // "오늘" = 스크리닝 실행일 (basedate에서 추출)
   const baseEl = document.querySelector("header .basedate b");
   const today = (baseEl && baseEl.textContent.trim()) || new Date().toISOString().slice(0, 10);
@@ -484,18 +482,36 @@ function applyPeriodFilter(period) {
   } else {
     cutoff = "0000-00-00";
   }
-  rows.forEach(r => {
-    const fs = r.dataset.firstSeen;
-    const show = period === "today" ? fs === cutoff : fs >= cutoff;
-    r.dataset.periodHidden = show ? "0" : "1";
-    r.style.display = show ? "" : "none";
+
+  // 각 tbody 별로 독립적으로 필터 + 번호 재매김 (1부터 다시)
+  ["tbody", "tbodyHigh", "tbodyVolume"].forEach(tbodyId => {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    const rows = Array.from(tbody.querySelectorAll("tr[data-first-seen]"));
+    rows.forEach(r => {
+      const fs = r.dataset.firstSeen;
+      const show = period === "today" ? fs === cutoff : fs >= cutoff;
+      r.dataset.periodHidden = show ? "0" : "1";
+      r.style.display = show ? "" : "none";
+    });
+    let n = 0;
+    rows.forEach(r => {
+      if (r.style.display === "none") return;
+      n++;
+      const idxCell = r.querySelector("td.idx");
+      if (idxCell) idxCell.textContent = n;
+    });
   });
-  let n = 0;
-  rows.forEach(r => {
-    if (r.style.display === "none") return;
-    n++;
-    const idxCell = r.querySelector("td.idx");
-    if (idxCell) idxCell.textContent = n;
+
+  // 탭 카운트 갱신
+  ["cntPullback", "cntW52", "cntVolSurge"].forEach((cntId, i) => {
+    const tbodyId = ["tbody","tbodyHigh","tbodyVolume"][i];
+    const tbody = document.getElementById(tbodyId);
+    const el = document.getElementById(cntId);
+    if (tbody && el) {
+      const visible = tbody.querySelectorAll('tr[data-first-seen]:not([style*="display: none"])').length;
+      el.textContent = visible;
+    }
   });
 }
 
