@@ -99,11 +99,15 @@ header .basedate b { color:var(--accent); }
 
 .tbl-card table { table-layout:fixed; }
 .tbl-card { background:var(--card); border:1px solid var(--line);
-  border-radius:14px; overflow-x:auto; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  border-radius:14px;
+  overflow-x:hidden;     /* 가로 스크롤 막음 — 사선 움직임 방지 */
+  overflow-y:auto; -webkit-overflow-scrolling:touch;
   margin:12px 0 22px; box-shadow:0 1px 3px rgba(15,23,42,.04);
-  max-height:380px;  /* 5행 정도 + 헤더 */ }
-.tbl-card table { min-width:1240px; }
-.tbl-card thead th { position:sticky; top:0; z-index:2; }  /* 헤더 고정 — 스크롤 시 보임 */
+  max-height:260px;      /* 헤더 + 5행 */
+  touch-action:pan-y;    /* 모바일 세로 터치만 */
+  overscroll-behavior:contain; }
+.tbl-card table { width:100%; min-width:auto; }   /* 컨테이너 폭에 비례 분배 */
+.tbl-card thead th { position:sticky; top:0; z-index:2; }  /* 헤더 고정 */
 table { width:100%; border-collapse:separate; border-spacing:0; font-size:13.5px; table-layout:fixed; }
 col.c-idx{width:44px;} col.c-disc{width:120px;} col.c-name{width:200px;} col.c-mkt{width:82px;}
 col.c-sec{width:140px;} col.c-cap{width:100px;} col.c-ret{width:112px;}
