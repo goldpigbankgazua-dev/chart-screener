@@ -1098,11 +1098,55 @@ window.addEventListener("message", function(e) {
   }
 });
 
+// 표 스크롤 축 잠금 — wheel/touch 시 큰 방향에만 스크롤 (사선 방지)
+function setupAxisLock(el) {
+  // wheel — 매 이벤트 큰 축만
+  el.addEventListener("wheel", function(e) {
+    const dx = e.deltaX, dy = e.deltaY;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      el.scrollLeft += dx;
+    } else {
+      el.scrollTop += dy;
+    }
+    e.preventDefault();
+  }, { passive: false });
+  // touch — 첫 8px 이동으로 축 결정 후 그 축만
+  let lockedAxis = null;
+  let startX = 0, startY = 0, lastX = 0, lastY = 0;
+  el.addEventListener("touchstart", function(e) {
+    const t = e.touches[0];
+    startX = lastX = t.clientX;
+    startY = lastY = t.clientY;
+    lockedAxis = null;
+  }, { passive: true });
+  el.addEventListener("touchmove", function(e) {
+    const t = e.touches[0];
+    if (!lockedAxis) {
+      const totalDx = Math.abs(t.clientX - startX);
+      const totalDy = Math.abs(t.clientY - startY);
+      if (totalDx < 8 && totalDy < 8) return;  // 아직 결정 안 함
+      lockedAxis = totalDx > totalDy ? "x" : "y";
+    }
+    if (lockedAxis === "x") {
+      el.scrollLeft -= (t.clientX - lastX);
+      e.preventDefault();
+    } else {
+      el.scrollTop -= (t.clientY - lastY);
+      e.preventDefault();
+    }
+    lastX = t.clientX;
+    lastY = t.clientY;
+  }, { passive: false });
+}
+
 (function init() {
   let saved = null;
   try { saved = localStorage.getItem("screener-theme"); } catch(e) {}
   applyTheme((saved && THEMES.indexOf(saved) >= 0) ? saved : "green");
   applyReturnPeriod("r3m");
+
+  // 3 탭 표 모두 axis-lock 적용
+  document.querySelectorAll(".tbl-card").forEach(setupAxisLock);
   const first = document.querySelector("#tbody tr[data-symbol]");
   if (first) first.classList.add("sel");
   // 첫 loadChart 호출을 layout 완료 후로 지연 — 첫 진입 시 차트 width 잘못 측정 방지
