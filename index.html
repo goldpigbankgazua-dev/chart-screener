@@ -523,10 +523,10 @@ if (_periodSel) {
   applyPeriodFilter(_periodSel.value);
 }
 
-// ─── 종목명·코드 검색 ───
+// ─── 종목명·코드 검색 — 3 tbody 모두 ───
 function applySearchFilter(q) {
   const norm = (q || "").trim().toLowerCase();
-  const rows = document.querySelectorAll("#tbody tr[data-name]");
+  const rows = document.querySelectorAll("#tbody tr[data-name], #tbodyHigh tr[data-name], #tbodyVolume tr[data-name]");
   rows.forEach(r => {
     const name = (r.dataset.name || "").toLowerCase();
     const code = (r.dataset.code || "").toLowerCase();
